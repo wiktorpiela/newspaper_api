@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
             message = "A user with that email already exists."
         )]
     )
-
+    
     class Meta:
         model = User
         fields = ("id", "username", "email", "password", "articles",)

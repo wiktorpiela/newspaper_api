@@ -9,7 +9,6 @@ from rest_framework.views import APIView
 from django.http import Http404
 from django.contrib.auth.models import User
 
-
 class ArticleList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
