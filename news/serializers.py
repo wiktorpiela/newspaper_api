@@ -10,10 +10,11 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ("id", "title", "text", "date", "author",)
-        read_only_fields = ("id", "date",) #te ktorych nie chce dostawac przy wysyłaniu requesta
+        read_only_fields = ("id", "date", "author") #te ktorych nie chce dostawac przy wysyłaniu requesta
 
 class UserSerializer(serializers.ModelSerializer):
-    articles = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all()) #wiele artykułów do modelu usera
+    #articles = serializers.PrimaryKeyRelatedField(many=True, queryset=Article.objects.all()) #wiele artykułów do modelu usera
+    articles = serializers.HyperlinkedRelatedField(many=True, view_name="articleDetails", queryset=Article.objects.all())
     email = serializers.EmailField(
         required = False,
         validators=[UniqueValidator(
@@ -33,7 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
         username = validated_data.get("username")   
         email = validated_data.get("email")
         password = validated_data.get("password")
-
+        
         try:
             validate_password(password)
         except ValidationError as e:

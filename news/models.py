@@ -14,7 +14,7 @@ class Article(models.Model):
     def __str__(self):
         return f"{self.title}, {self.author}"
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL) #lub sender=User
+@receiver(post_save, sender=User) #lub sender=User
 def create_auth_token(sender, instance=None, created=False, **kwargs): #po swtorzeniu instancji usera ma przypisać temu userowi token
     if created:
         Token.objects.create(user=instance)
