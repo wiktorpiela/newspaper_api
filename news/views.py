@@ -11,27 +11,32 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import IsAdminUser, AllowAny
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.reverse import reverse
+from rest_framework.pagination import PageNumberPagination
+from .paginators import ArticlePaginator
 
-# class ArticleList(generics.ListCreateAPIView):
-#     queryset = Article.objects.all()
-#     serializer_class = ArticleSerializer
+class ArticleList(generics.ListCreateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    pagination_class = ArticlePaginator
 
-#     def perform_create(self, serializer):
-#         serializer.save(author=self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
-class ArticleList(APIView):
-    def get(self, request, format=None):
-        queryset = Article.objects.all()
-        serializer = ArticleSerializer(queryset, many=True)
-        return JsonResponse(serializer.data, safe=False)
+# class ArticleList(APIView):
+#     pagination_class = ArticlePaginator
     
-    def post(self, request, format=None):
-        serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+#     def get(self, request, format=None):
+#         queryset = Article.objects.all()
+#         serializer = ArticleSerializer(queryset, many=True)
+#         return Response(serializer.data)
+    
+#     def post(self, request, format=None):
+#         serializer = ArticleSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(author=self.request.user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         else:
+#             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ArticleDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
