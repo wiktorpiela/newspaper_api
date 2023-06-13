@@ -1,26 +1,12 @@
 const btn = document.querySelector("button")
 const title = document.querySelector("h1")
-const isSuccess = true
-let articles
+const norrisUrl = "https://api.chucknorris.io/jokes/"
 
 
+async function logJSONData(url, queryName) {
+    const response = await fetch(`${url}search?query=${queryName}`);
+    const jsonData = await response.json();
+    console.log(jsonData);
+  }
 
-
-//hoisitng
-if (isSuccess) {
-    article = ["article1", "article2"]
-} else {
-    console.log("something went wrong")
-}
-
-//functions
-btn.addEventListener("click", () => {
-    title.innerHTML = "Wiktor"
-}
-)
-
-const printName = (name) => {
-    console.log(`Hello ${name}`)
-}
-
-printName("Wiktor")
+logJSONData(norrisUrl, "cat")
