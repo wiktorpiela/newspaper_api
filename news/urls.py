@@ -3,5 +3,5 @@ from . import views
 
 app_name = 'news'
 urlpatterns = [
-    path('', ),
+    path('articles-list-create/', views.ArticleListCreate.as_view(), name='articleListCreate'),
 ]
