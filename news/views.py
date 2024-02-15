@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from news.models import Article
 from news.serializers import ArticleSerializer
 
-
 class HelloWorldView(APIView):
     def get(self, request):
         return Response({"message": "Hello World!"})
@@ -17,5 +16,9 @@ class ArticleListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
 
