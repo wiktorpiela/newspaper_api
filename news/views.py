@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from news.models import Article
 from news.serializers import ArticleSerializer
+from .permissions import IsOwnerOrReadOnly
 
 class HelloWorldView(APIView):
     def get(self, request):
@@ -20,5 +21,6 @@ class ArticleListCreate(generics.ListCreateAPIView):
 class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+    permission_classes = [IsOwnerOrReadOnly]
 
 
