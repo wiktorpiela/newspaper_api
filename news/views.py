@@ -6,6 +6,9 @@ from news.models import Article
 from news.serializers import ArticleSerializer, UserSerializer
 from .permissions import IsOwnerOrReadOnly, IsUserAccountOwner
 from django.contrib.auth.models import User
+import random
+from rest_framework.views import APIView
+from rest_framework.reverse import reverse
 
 class HelloWorldView(APIView):
     def get(self, request):
@@ -35,3 +38,15 @@ class UserDetail(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsUserAccountOwner]
+
+class APIRootView(APIView):
+
+    def get(self, request, format=None):
+        articles = Article.objects.all()
+        pk = random.choice(articles).id
+        links = {
+            'articles': reverse('news:articleListCreate', request=request, format=format),
+            'article-details': reverse('news:articleDetails', args = [pk], request=request, format=format),
+            'users': reverse('news:userListCreate', request=request, format=format),
+        }
+        return Response(links)
