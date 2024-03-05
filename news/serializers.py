@@ -15,3 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=False, validators=[UniqueValidator(queryset=User.objects.all())])
     class Meta:
         model = User
+        fields = ("id", "username", "email", "password", "articles",)
+        extra_kwargs = {
+            "password": {"write_only":True},
+        }
