@@ -1,7 +1,9 @@
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
 from news.models import Article
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 class ArticleSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
@@ -19,3 +21,19 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only":True},
         }
+
+    def create(self, validated_data):
+        username = validated_data.get("username")
+        password = validated_data.get("password")
+        email = validated_data.get("email")
+
+        try:
+            validate_password(password)
+        except ValidationError as e:
+            raise exceptions.ValidationError(e)
+        else:
+            if email:
+                user = User.objects.create_user(username=username, email=email, password=password)
+            else:
+                user = User.objects.create_user(username=username, password=password)
+            return user
