@@ -4,7 +4,7 @@ from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from news.models import Article
 from news.serializers import ArticleSerializer, UserSerializer
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsUserAccountOwner
 from django.contrib.auth.models import User
 
 class HelloWorldView(APIView):
@@ -31,4 +31,7 @@ class UserView(generics.ListCreateAPIView):
     def get_permissions(self):
         return [permissions.AllowAny() if self.request.method=='POST' else permissions.IsAdminUser()]
 
-
+class UserDetail(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsUserAccountOwner]
