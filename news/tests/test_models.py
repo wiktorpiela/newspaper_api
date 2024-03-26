@@ -13,3 +13,5 @@ class ArticleTestCase(TestCase):
     def test_article(self):
         article = Article.objects.get(id=self.article.id)
         self.assertEqual(article.title, self.article.title)
+        self.assertEqual(article.text, self.article.text)
+        self.assertEqual(article.author, self.article.author)
