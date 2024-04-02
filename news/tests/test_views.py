@@ -8,7 +8,7 @@ import random
 
 # data from Faker
 
-class TestGetMethod(APITestCase):
+class TestGetDeleteMethod(APITestCase):
 
     def setUp(self):
         self.random_idx = random.randint(0, 10)
@@ -33,5 +33,45 @@ class TestGetMethod(APITestCase):
         response = self.client.delete(self.url_retrieve)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    #put post user
+    # put post / user
+    
+class TestPostMethod(APITestCase):
+
+    def setUp(self):
+        self.url_post = reverse('news:articleListCreate')
+        self.user = User.objects.create_user(username=f'testuser', password='122334')
+        self.client.force_authenticate(self.user)
+        self.data = {
+            'title': 'test title',
+            'text': 'test text'
+        }
+
+    def test_create_article(self):
+        response = self.client.post(self.url_post, self.data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class TestPutMethod(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username=f'testuser', password='122334')
+        self.client.force_authenticate(self.user)
+        self.test_article = Article.objects.create(title='title', text='test text', author=self.user)
+        self.url_put = reverse('news:articleDetails', args=[self.test_article.id])
+        self.updated_article = {
+            'title': 'new title',
+            'text': 'test text'
+        }
+
+    def test_update_article(self):
+        response = self.client.put(self.url_put, self.updated_article)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    
+
+
+
+
+        
+    
 
