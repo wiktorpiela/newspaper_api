@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.reverse import reverse
 import random
+from rest_framework import viewsets
 
 from news.models import Article
 from news.serializers import ArticleSerializer, UserSerializer
@@ -34,6 +35,11 @@ class UserDetail(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsUserAccountOwner]
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAdminUser]
 
 class APIRootView(APIView):
 
